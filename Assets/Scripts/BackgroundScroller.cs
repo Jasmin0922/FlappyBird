@@ -1,9 +1,6 @@
 using UnityEngine;
 
-/// <summary>
-/// Simple infinite texture scroller using material.mainTextureOffset.
-/// Attach to the Quad (or object with a Renderer).
-/// </summary>
+
 [RequireComponent(typeof(Renderer))]
 public class BackgroundScroller : MonoBehaviour
 {
@@ -31,6 +28,7 @@ public class BackgroundScroller : MonoBehaviour
 
     void Update()
     {
+        if (!GameManager.instance.isGameStarted) return;
         Vector2 delta = direction.normalized * (speed * Time.deltaTime);
 
         if (useSharedMaterial)

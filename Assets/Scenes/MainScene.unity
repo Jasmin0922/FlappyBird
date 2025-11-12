@@ -170,8 +170,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GetReadyUIController
   canvasGroup: {fileID: 105733938}
-  fadeDuration: 0.5
-  displayTime: 1.2
   autoStartGame: 1
 --- !u!225 &105733938
 CanvasGroup:
@@ -932,6 +930,7 @@ MonoBehaviour:
   gameOverUI: {fileID: 1947998568}
   getReadyUI: {fileID: 105733935}
   isGameOver: 0
+  isGameStarted: 0
 --- !u!4 &1338355425
 Transform:
   m_ObjectHideFlags: 0
@@ -958,8 +957,9 @@ GameObject:
   - component: {fileID: 1387451086}
   - component: {fileID: 1387451088}
   - component: {fileID: 1387451089}
+  - component: {fileID: 1387451090}
   m_Layer: 5
-  m_Name: GetReadyImage
+  m_Name: GetReadyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1012,7 +1012,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -82518710383992500, guid: 8d4f6b084c4b14e8b9d843d9c3037a68, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8d4f6b084c4b14e8b9d843d9c3037a68, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1022,6 +1022,62 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1387451090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1387451085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1387451089}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1338355424}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: StartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1566465538
 GameObject:
   m_ObjectHideFlags: 0
@@ -1054,6 +1110,8 @@ MonoBehaviour:
   pipePrefab: {fileID: 6550793368693350275, guid: b91ed1cfad3df4a1193de0bf7e259676, type: 3}
   spawnRate: 1
   pipeGap: 2.8
+  difficultyIncreaseRate: 0.8
+  minPipeGap: 1.4
 --- !u!4 &1566465540
 Transform:
   m_ObjectHideFlags: 0
@@ -1248,6 +1306,7 @@ GameObject:
   - component: {fileID: 1795310376}
   - component: {fileID: 1795310375}
   - component: {fileID: 1795310374}
+  - component: {fileID: 1795310379}
   m_Layer: 0
   m_Name: Bird
   m_TagString: Player
@@ -1268,10 +1327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BirdController
   jumpForce: 5
-  birdSprites:
-  - {fileID: -2852661201194558424, guid: dde791f6261614c159f183ae6ad7b779, type: 3}
-  - {fileID: 4672514779453497517, guid: 6e9b1b98104154dc48d90d2adc9c2256, type: 3}
-  - {fileID: 6437894598648814375, guid: 2a51bef5efd314eee887d644ea32d373, type: 3}
+  deadSprite: {fileID: 4013982585794058341, guid: 299af532c0a6042e1a43abdebf35becd, type: 3}
 --- !u!58 &1795310375
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1408,6 +1464,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1795310379
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1795310373}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b5b63feefb56f4e41bba9a063c8c9ae9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1947998568
 GameObject:
   m_ObjectHideFlags: 0

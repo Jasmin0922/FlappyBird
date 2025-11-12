@@ -1,33 +1,69 @@
 using UnityEngine;
 
-public class PipeSpawner : MonoBehaviour 
+public class PipeSpawner : MonoBehaviour
 {
-    public GameObject pipePrefab;
-    public float spawnRate = 1f;
-    public float pipeGap = 2.8f;
-    
-    [Header("自动计算的安全范围")]
-    private float heightOffset;
-    
-    void Start() 
+  public GameObject pipePrefab;
+  public float spawnRate = 1f;
+  public float pipeGap = 2.8f;
+  public float difficultyIncreaseRate = 0.2f; // how often to increase difficulty (seconds)
+  public float minPipeGap = 1.4f; // smallest allowed gap
+                                  // public float maxSpawnRate = 0.6f; // fastest spawn allowed
+
+  private float heightOffset;
+
+  private bool isSpawning = false;
+
+  void Start()
+  {
+
+    Camera cam = Camera.main;
+    float screenTop = cam.orthographicSize;
+    float pipeHalfHeight = 1.6f;
+    float pipeLocalY = 3f;
+
+    heightOffset = screenTop - pipeLocalY - pipeHalfHeight;
+  }
+  void Update()
+  {
+    if (isSpawning && GameManager.instance.isGameOver)
     {
-        // 自动计算安全的 heightOffset
-        Camera cam = Camera.main;
-        float screenTop = cam.orthographicSize;
-        float pipeHalfHeight = 1.6f; // Size Y 的一半：3.2 / 2
-        float pipeLocalY = 3f; // 管子相对 prefab 中心的距离
-        
-        // 确保管子不超出屏幕
-        heightOffset = screenTop - pipeLocalY - pipeHalfHeight;
-        
-        Debug.Log($"屏幕高度: ±{screenTop}, 安全的 heightOffset: {heightOffset}");
-        
-        InvokeRepeating("SpawnPipe", 0f, spawnRate);
+      isSpawning = false;
+      CancelInvoke(nameof(SpawnPipe));
+      CancelInvoke(nameof(IncreaseDifficulty));
     }
-    
-    void SpawnPipe() 
+  }
+
+  public void StartSpawning()
+  {
+    if (isSpawning) return; // 防止重复启动
+    isSpawning = true;
+    InvokeRepeating(nameof(SpawnPipe), 0f, spawnRate);
+    InvokeRepeating(nameof(IncreaseDifficulty), difficultyIncreaseRate, difficultyIncreaseRate);
+  }
+
+  public void StopSpawning()
+  {
+    if (!isSpawning) return;
+    isSpawning = false;
+    CancelInvoke(nameof(SpawnPipe));
+    CancelInvoke(nameof(IncreaseDifficulty));
+  }
+  void SpawnPipe()
+  {
+    float randomY = Random.Range(-heightOffset, heightOffset);
+    GameObject newPipe = Instantiate(pipePrefab, new Vector3(10, randomY, 0), Quaternion.identity);
+
+    Pipe pipe = newPipe.GetComponent<Pipe>();
+    if (pipe != null)
     {
-        float randomY = Random.Range(-heightOffset, heightOffset);
-        Instantiate(pipePrefab, new Vector3(10, randomY, 0), Quaternion.identity);
+      pipe.SetGap(pipeGap);
     }
+  }
+
+  void IncreaseDifficulty()
+  {
+    if (pipeGap > minPipeGap)
+      pipeGap -= 0.02f;
+
+  }
 }

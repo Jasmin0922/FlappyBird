@@ -2,57 +2,59 @@ using UnityEngine;
 
 public class Bird : MonoBehaviour
 {
-    [Header("Flight Parameters")]
-    public float jumpForce = 3f;
+  [Header("Flight Parameters")]
+  public float jumpForce = 3f;
 
-    [Header("Bird Sprites")]
-    public Sprite[] birdSprites; // 0 = mid, 1 = up, 2 = down
+  [Header("Sprites")]
+  public Sprite deadSprite;
 
-    private Rigidbody2D rb;
-    private SpriteRenderer sr;
-    private bool isDead = false;
+  private Rigidbody2D rb;
+  private Animator animator;
+  private SpriteRenderer sr;
+  private bool isDead = false;
 
-    void Awake()
-    {
-        // Get components
+  void Awake()
+  {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
+
+        rb.gravityScale = 0f;
+  }
+
+  void Update()
+  {
+    if (!GameManager.instance.isGameStarted || isDead) return;
+
+    // Space key to make the bird jump
+    if (Input.GetKeyDown(KeyCode.Space))
+    {
+      rb.linearVelocity = Vector2.up * jumpForce;
+
     }
 
-    void Update()
+    // Rotate bird based on vertical speed for natural flight
+    float angle = Mathf.Clamp(rb.linearVelocity.y * 5f, -90f, 45f);
+    transform.rotation = Quaternion.Euler(0, 0, angle);
+
+  }
+
+  private void OnCollisionEnter2D(Collision2D collision)
+  {
+    if (isDead) return;
+    isDead = true;
+
+    if (animator != null)
+      animator.enabled = false;
+
+    if (sr != null && deadSprite != null)
+      sr.sprite = deadSprite;
+
+    GameManager.instance.GameOver();
+  }
+    
+        public void OnGameStart()
     {
-        if (isDead) return;
-
-        // Space key to make the bird jump
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            rb.linearVelocity = Vector2.up * jumpForce;
-            sr.sprite = birdSprites[1]; // Upward wing sprite
-        }
-
-        // Change bird sprite based on vertical speed
-        if (rb.linearVelocity.y > 0.1f)
-        {
-            sr.sprite = birdSprites[1]; // Ascending
-        }
-        else if (rb.linearVelocity.y < -0.1f)
-        {
-            sr.sprite = birdSprites[2]; // Falling
-        }
-        else
-        {
-            sr.sprite = birdSprites[0]; // Neutral
-        }
-
-        // Rotate bird based on vertical speed for natural flight
-        float angle = Mathf.Clamp(rb.linearVelocity.y * 5f, -90f, 45f);
-        transform.rotation = Quaternion.Euler(0, 0, angle);
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        // Collision with ground or pipe
-        isDead = true;
-        GameManager.instance.GameOver();
+        rb.gravityScale = 1f; // 或你原来的值
     }
 }

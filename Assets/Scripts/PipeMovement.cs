@@ -6,6 +6,7 @@ public class PipeMovement : MonoBehaviour
 
     void Update()
     {
+      if (!GameManager.instance.isGameStarted) return;
         if (GameManager.instance != null && GameManager.instance.isGameOver) return;
 
         transform.position += Vector3.left * speed * Time.deltaTime;
