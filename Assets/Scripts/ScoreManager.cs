@@ -8,7 +8,9 @@ public class ScoreManager : MonoBehaviour
   public int highScore = 0;
 
   public ScoreDisplay scoreDisplay;
-  public ScoreDisplay gameOverHighScoreDisplay;
+  // public ScoreDisplay gameOverHighScoreDisplay;
+
+  public HighScoreTMPDisplay gameOverHighScoreTMPDisplay;
 
   void Awake()
   {
@@ -44,14 +46,16 @@ public class ScoreManager : MonoBehaviour
       scoreDisplay.ShowScore(score);
   }
 
-  // 【新增】在游戏结束时调用此方法来更新最高分显示
   public void ShowGameOverHighScore()
   {
-    if (gameOverHighScoreDisplay != null)
+    if (gameOverHighScoreTMPDisplay != null)
     {
-      // 直接使用之前从 PlayerPrefs 读取的最高分
-      gameOverHighScoreDisplay.ShowScore(highScore);
+      gameOverHighScoreTMPDisplay.ShowHighScore(highScore);
     }
+    // else if (gameOverHighScoreDisplay != null)
+    // {
+    //   gameOverHighScoreDisplay.ShowScore(highScore);
+    // }
   }
 
   public void ResetScore()
