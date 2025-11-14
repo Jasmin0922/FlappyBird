@@ -8,11 +8,12 @@ public class GameManager : MonoBehaviour
   [Header("UI References")]
   public GameObject gameOverUI;
   public GameObject getReadyUI;
-  public GameObject pauseUI; // <<-- 新增: 暂停菜单UI
+  public GameObject pauseUI;
 
   [HideInInspector] public bool isGameOver = false;
   [HideInInspector] public bool isGameStarted = false;
-  private bool isPaused = false; // <<-- 新增: 暂停状态
+  private bool isPaused = false;
+  private float pauseCooldown = 0f;
 
 
   private void Awake()
@@ -27,8 +28,12 @@ public class GameManager : MonoBehaviour
 
   private void Update()
   {
-    if (Input.GetKeyDown(KeyCode.Escape))
+    if (pauseCooldown > 0f)
+      pauseCooldown -= Time.unscaledDeltaTime;
+    if (Input.GetKeyDown(KeyCode.Escape) && pauseCooldown <= 0f)
     {
+      pauseCooldown = 0.1f;
+
       if (isPaused)
         ResumeGame();
       else
@@ -45,12 +50,16 @@ public class GameManager : MonoBehaviour
     Time.timeScale = 0f; // <<-- 核心: 将时间流速设为 0，暂停游戏
 
     if (pauseUI != null)
+    {
+      pauseUI.SetActive(false);
       pauseUI.SetActive(true);
+    }
+
   }
 
   public void ResumeGame()
   {
-    if (!isPaused) return; // 只有在暂停状态才能继续
+    if (!isPaused) return;
 
     isPaused = false;
     Time.timeScale = 1f; // <<-- 核心: 恢复时间流速
@@ -102,8 +111,8 @@ public class GameManager : MonoBehaviour
 
   public void RestartGame()
   {
-    // 确保在重新加载场景前恢复时间流速
     Time.timeScale = 1f;
+    if (pauseUI) pauseUI.SetActive(false);
     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
   }
 }
