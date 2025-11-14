@@ -15,11 +15,11 @@ public class Bird : MonoBehaviour
 
   void Awake()
   {
-        rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-        sr = GetComponent<SpriteRenderer>();
+    rb = GetComponent<Rigidbody2D>();
+    animator = GetComponent<Animator>();
+    sr = GetComponent<SpriteRenderer>();
 
-        rb.gravityScale = 0f;
+    rb.gravityScale = 0f;
   }
 
   void Update()
@@ -30,6 +30,10 @@ public class Bird : MonoBehaviour
     if (Input.GetKeyDown(KeyCode.Space))
     {
       rb.linearVelocity = Vector2.up * jumpForce;
+      if (SoundManager.Instance != null)
+      {
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.jumpSound);
+      }
 
     }
 
@@ -52,9 +56,9 @@ public class Bird : MonoBehaviour
 
     GameManager.instance.GameOver();
   }
-    
-        public void OnGameStart()
-    {
-        rb.gravityScale = 1f; // 或你原来的值
-    }
+
+  public void OnGameStart()
+  {
+    rb.gravityScale = 1f; // 或你原来的值
+  }
 }

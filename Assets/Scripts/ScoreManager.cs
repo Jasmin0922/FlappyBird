@@ -23,6 +23,12 @@ public class ScoreManager : MonoBehaviour
   public void AddScore(int amount)
   {
     score += amount;
+
+    if (SoundManager.Instance != null)
+    {
+      SoundManager.Instance.PlaySFX(SoundManager.Instance.scoreSound);
+    }
+
     if (score > highScore)
     {
       highScore = score;

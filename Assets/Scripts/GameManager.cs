@@ -98,16 +98,17 @@ public class GameManager : MonoBehaviour
     if (isGameOver) return;
     isGameOver = true;
 
-    // 游戏结束时，可选停止时间流逝，或保持 1f 让动画继续。
-    // 这里保持 1f，只停止 PipeSpawner。
-
     if (gameOverUI != null)
       gameOverUI.SetActive(true);
 
-    // 【新增】游戏结束时，通知 ScoreManager 显示最高分
     if (ScoreManager.Instance != null)
     {
       ScoreManager.Instance.ShowGameOverHighScore();
+    }
+
+    if (SoundManager.Instance != null)
+    {
+      SoundManager.Instance.PlaySFX(SoundManager.Instance.hitSound);
     }
 
     PipeSpawner spawner = FindFirstObjectByType<PipeSpawner>();
