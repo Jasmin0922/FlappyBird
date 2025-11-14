@@ -5,7 +5,7 @@ public class PipeSpawner : MonoBehaviour
   public GameObject pipePrefab;
   public float spawnRate = 1f;
   public float pipeGap = 2.8f;
-  public float difficultyIncreaseRate = 0.2f; // how often to increase difficulty (seconds)
+  public float difficultyIncreaseRate = 0.05f; // how often to increase difficulty (seconds)
   public float minPipeGap = 1.4f; // smallest allowed gap
                                   // public float maxSpawnRate = 0.6f; // fastest spawn allowed
 
@@ -35,7 +35,7 @@ public class PipeSpawner : MonoBehaviour
 
   public void StartSpawning()
   {
-    if (isSpawning) return; // 防止重复启动
+    if (isSpawning) return;
     isSpawning = true;
     InvokeRepeating(nameof(SpawnPipe), 0f, spawnRate);
     InvokeRepeating(nameof(IncreaseDifficulty), difficultyIncreaseRate, difficultyIncreaseRate);

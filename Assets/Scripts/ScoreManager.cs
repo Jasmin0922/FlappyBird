@@ -2,41 +2,61 @@ using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-    public static ScoreManager Instance;
+  public static ScoreManager Instance;
 
-    public int score = 0;
+  public int score = 0;
+  public int highScore = 0;
 
-    public ScoreDisplay scoreDisplay; // 关联到用图片显示数字的脚本
+  public ScoreDisplay scoreDisplay;
+  public ScoreDisplay gameOverHighScoreDisplay;
 
-    void Awake()
-    {
-            if (Instance == null)
-        Instance = this;
+  void Awake()
+  {
+    if (Instance == null)
+      Instance = this;
     else if (Instance != this)
-        Destroy(gameObject);
-    }
+      Destroy(gameObject);
 
-    public void AddScore(int amount)
-    {
-        score += amount;
-        UpdateScoreDisplay();
-    }
+    highScore = PlayerPrefs.GetInt("HighScore", 0);
+  }
 
-    void UpdateScoreDisplay()
+  public void AddScore(int amount)
+  {
+    score += amount;
+    if (score > highScore)
     {
-        if (scoreDisplay != null)
-            scoreDisplay.ShowScore(score);
+      highScore = score;
+      PlayerPrefs.SetInt("HighScore", highScore);
+      PlayerPrefs.Save();
     }
+    UpdateScoreDisplay();
+  }
 
-    public void ResetScore()
+  void UpdateScoreDisplay()
+  {
+    if (scoreDisplay != null)
+      scoreDisplay.ShowScore(score);
+  }
+
+  // 【新增】在游戏结束时调用此方法来更新最高分显示
+  public void ShowGameOverHighScore()
+  {
+    if (gameOverHighScoreDisplay != null)
     {
-        score = 0;
-        UpdateScoreDisplay();
+      // 直接使用之前从 PlayerPrefs 读取的最高分
+      gameOverHighScoreDisplay.ShowScore(highScore);
     }
-    
-    void OnDestroy()
-{
+  }
+
+  public void ResetScore()
+  {
+    score = 0;
+    UpdateScoreDisplay();
+  }
+
+  void OnDestroy()
+  {
     if (Instance == this)
-        Instance = null;
-}
+      Instance = null;
+  }
 }

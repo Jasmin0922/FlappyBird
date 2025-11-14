@@ -104,6 +104,12 @@ public class GameManager : MonoBehaviour
     if (gameOverUI != null)
       gameOverUI.SetActive(true);
 
+    // 【新增】游戏结束时，通知 ScoreManager 显示最高分
+    if (ScoreManager.Instance != null)
+    {
+      ScoreManager.Instance.ShowGameOverHighScore();
+    }
+
     PipeSpawner spawner = FindFirstObjectByType<PipeSpawner>();
     if (spawner != null)
       spawner.StopSpawning();
@@ -113,6 +119,7 @@ public class GameManager : MonoBehaviour
   {
     Time.timeScale = 1f;
     if (pauseUI) pauseUI.SetActive(false);
+    if (gameOverUI) gameOverUI.SetActive(false);
     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
   }
 }
