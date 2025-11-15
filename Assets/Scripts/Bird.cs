@@ -12,6 +12,9 @@ public class Bird : MonoBehaviour
   private Animator animator;
   private SpriteRenderer sr;
   private bool isDead = false;
+  private float deathRotateSpeed = -720f;
+  private float deathRotateDuration = 1f;
+  private float deathTimer = 0f;
 
   void Awake()
   {
@@ -24,9 +27,18 @@ public class Bird : MonoBehaviour
 
   void Update()
   {
+    if (isDead)
+    {
+      if (deathTimer < deathRotateDuration)
+      {
+        transform.Rotate(0, 0, deathRotateSpeed * Time.deltaTime);
+        deathTimer += Time.deltaTime;
+      }
+
+      return;
+    }
     if (!GameManager.instance.isGameStarted || isDead) return;
 
-    // Space key to make the bird jump
     if (Input.GetKeyDown(KeyCode.Space))
     {
       rb.linearVelocity = Vector2.up * jumpForce;
@@ -34,10 +46,8 @@ public class Bird : MonoBehaviour
       {
         SoundManager.Instance.PlaySFX(SoundManager.Instance.jumpSound);
       }
-
     }
 
-    // Rotate bird based on vertical speed for natural flight
     float angle = Mathf.Clamp(rb.linearVelocity.y * 5f, -90f, 45f);
     transform.rotation = Quaternion.Euler(0, 0, angle);
 
@@ -46,6 +56,7 @@ public class Bird : MonoBehaviour
   private void OnCollisionEnter2D(Collision2D collision)
   {
     if (isDead) return;
+
     isDead = true;
 
     if (animator != null)
@@ -54,11 +65,14 @@ public class Bird : MonoBehaviour
     if (sr != null && deadSprite != null)
       sr.sprite = deadSprite;
 
+    rb.gravityScale = 1f;
+    rb.linearVelocity = Vector2.zero;
+
     GameManager.instance.GameOver();
   }
 
   public void OnGameStart()
   {
-    rb.gravityScale = 1f; // 或你原来的值
+    rb.gravityScale = 1f;
   }
 }
