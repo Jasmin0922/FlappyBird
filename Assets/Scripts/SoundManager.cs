@@ -6,7 +6,6 @@ public class SoundManager : MonoBehaviour
 
   private AudioSource sfxSource;
 
-  [Header("音效文件 (在 Inspector 中拖拽赋值)")]
   public AudioClip jumpSound;
   public AudioClip scoreSound;
   public AudioClip hitSound;
@@ -16,8 +15,6 @@ public class SoundManager : MonoBehaviour
     if (Instance == null)
     {
       Instance = this;
-      // 确保 SoundManager 在场景重载时不被销毁 (可选)
-      // DontDestroyOnLoad(gameObject);
     }
     else
     {
