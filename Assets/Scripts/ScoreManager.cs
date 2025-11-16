@@ -8,7 +8,6 @@ public class ScoreManager : MonoBehaviour
   public int highScore = 0;
 
   public ScoreDisplay scoreDisplay;
-  // public ScoreDisplay gameOverHighScoreDisplay;
 
   public HighScoreTMPDisplay gameOverHighScoreTMPDisplay;
 
@@ -52,10 +51,6 @@ public class ScoreManager : MonoBehaviour
     {
       gameOverHighScoreTMPDisplay.ShowHighScore(highScore);
     }
-    // else if (gameOverHighScoreDisplay != null)
-    // {
-    //   gameOverHighScoreDisplay.ShowScore(highScore);
-    // }
   }
 
   public void ResetScore()

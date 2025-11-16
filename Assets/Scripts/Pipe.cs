@@ -6,21 +6,20 @@ public class Pipe : MonoBehaviour
   public Transform bottomPipe;
   public float gap = 2.8f;
 
-  float halfPipeHeight;   // 自动计算
+  private const float defaultPipeHalfHeight = 2f;
+  private float halfPipeHeight;
 
   void Start()
   {
-    // 自动从 topPipe 计算高度
     SpriteRenderer sr = topPipe.GetComponent<SpriteRenderer>();
 
     if (sr != null)
     {
-      // 世界空间高度
       halfPipeHeight = sr.bounds.extents.y;
     }
     else
     {
-      halfPipeHeight = 2f; // fallback
+      halfPipeHeight = defaultPipeHalfHeight;
     }
 
     UpdatePipePositions();
@@ -34,8 +33,6 @@ public class Pipe : MonoBehaviour
 
   void UpdatePipePositions()
   {
-    if (halfPipeHeight <= 0) return;
-
     float offset = halfPipeHeight + gap / 2f;
 
     topPipe.localPosition = new Vector3(0, offset, 0);

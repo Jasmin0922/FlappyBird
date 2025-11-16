@@ -217,7 +217,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GetReadyUIController
   canvasGroup: {fileID: 105733938}
-  autoStartGame: 1
 --- !u!225 &105733938
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -2326,6 +2325,8 @@ MonoBehaviour:
   pauseUI: {fileID: 1663003157}
   isGameOver: 0
   isGameStarted: 0
+  bird: {fileID: 1795310374}
+  spawner: {fileID: 1566465539}
 --- !u!4 &1338355425
 Transform:
   m_ObjectHideFlags: 0

@@ -22,15 +22,6 @@ public class PipeSpawner : MonoBehaviour
 
     heightOffset = screenTop - pipeLocalY - pipeHalfHeight;
   }
-  void Update()
-  {
-    if (isSpawning && GameManager.instance.isGameOver)
-    {
-      isSpawning = false;
-      CancelInvoke(nameof(SpawnPipe));
-      CancelInvoke(nameof(IncreaseDifficulty));
-    }
-  }
 
   public void StartSpawning()
   {
@@ -62,7 +53,7 @@ public class PipeSpawner : MonoBehaviour
   void IncreaseDifficulty()
   {
     if (pipeGap > minPipeGap)
-      pipeGap -= 0.01f;
+      pipeGap -= 0.03f;
 
   }
 }

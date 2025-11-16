@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class ScoreDisplay : MonoBehaviour
 {
-  public Sprite[] numberSprites;  // 0~9 对应的图片
-  public GameObject digitPrefab;  // 显示单个数字的 Image 预制体
+  public Sprite[] numberSprites;
+  public GameObject digitPrefab;
 
   private List<GameObject> digits = new List<GameObject>();
 

@@ -2,10 +2,8 @@ using UnityEngine;
 
 public class Bird : MonoBehaviour
 {
-  [Header("Flight Parameters")]
   public float jumpForce = 3f;
 
-  [Header("Sprites")]
   public Sprite deadSprite;
 
   private Rigidbody2D rb;
@@ -37,7 +35,7 @@ public class Bird : MonoBehaviour
 
       return;
     }
-    if (!GameManager.instance.isGameStarted || isDead) return;
+    if (!GameManager.instance.isGameStarted) return;
 
     if (Input.GetKeyDown(KeyCode.Space))
     {

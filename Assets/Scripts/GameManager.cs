@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 
   [HideInInspector] public bool isGameOver = false;
   [HideInInspector] public bool isGameStarted = false;
+  [SerializeField] private Bird bird;
+  [SerializeField] private PipeSpawner spawner;
   private bool isPaused = false;
   private float pauseCooldown = 0f;
 
@@ -24,6 +26,7 @@ public class GameManager : MonoBehaviour
       return;
     }
     instance = this;
+
   }
 
   private void Update()
@@ -44,14 +47,13 @@ public class GameManager : MonoBehaviour
 
   public void PauseGame()
   {
-    if (isGameOver || isPaused) return; // 游戏结束或已暂停时，不能再次暂停
+    if (isGameOver || isPaused) return;
 
     isPaused = true;
-    Time.timeScale = 0f; // <<-- 核心: 将时间流速设为 0，暂停游戏
+    Time.timeScale = 0f;
 
     if (pauseUI != null)
     {
-      pauseUI.SetActive(false);
       pauseUI.SetActive(true);
     }
 
@@ -62,7 +64,7 @@ public class GameManager : MonoBehaviour
     if (!isPaused) return;
 
     isPaused = false;
-    Time.timeScale = 1f; // <<-- 核心: 恢复时间流速
+    Time.timeScale = 1f;
 
     if (pauseUI != null)
       pauseUI.SetActive(false);
@@ -71,8 +73,6 @@ public class GameManager : MonoBehaviour
   public void StartGame()
   {
     if (isGameStarted) return;
-
-    // 确保游戏开始时时间是流动的
     Time.timeScale = 1f;
 
     isGameStarted = true;
@@ -81,14 +81,9 @@ public class GameManager : MonoBehaviour
     if (getReadyUI != null)
       getReadyUI.SetActive(false);
 
-    // **注意：由于您之前反馈过 FindFirstObjectByType 的问题，
-    // 强烈建议将 Bird 和 PipeSpawner 声明为 public 变量并在 Inspector 中拖拽赋值。**
-
-    Bird bird = FindFirstObjectByType<Bird>();
     if (bird != null)
       bird.OnGameStart();
 
-    PipeSpawner spawner = FindFirstObjectByType<PipeSpawner>();
     if (spawner != null)
       spawner.StartSpawning();
   }
@@ -111,7 +106,6 @@ public class GameManager : MonoBehaviour
       SoundManager.Instance.PlaySFX(SoundManager.Instance.hitSound);
     }
 
-    PipeSpawner spawner = FindFirstObjectByType<PipeSpawner>();
     if (spawner != null)
       spawner.StopSpawning();
   }
