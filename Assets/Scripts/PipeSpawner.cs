@@ -5,7 +5,7 @@ public class PipeSpawner : MonoBehaviour
   public GameObject pipePrefab;
   public float spawnRate = 1f;
   public float pipeGap = 2.8f;
-  public float difficultyIncreaseRate = 3f; // how often to increase difficulty (seconds)
+  public float difficultyIncreaseRate = 2f; // how often to increase difficulty (seconds)
   public float minPipeGap = 1.4f;
 
   private float heightOffset;
@@ -53,7 +53,7 @@ public class PipeSpawner : MonoBehaviour
   void IncreaseDifficulty()
   {
     if (pipeGap > minPipeGap)
-      pipeGap -= 0.03f;
+      pipeGap -= 0.06f;
 
   }
 }
